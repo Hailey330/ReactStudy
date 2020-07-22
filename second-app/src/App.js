@@ -1,37 +1,55 @@
 import React, { Component } from 'react';
+import Post from './Post';
+import styled from 'styled-components';
 
 class App extends Component {
   state = {
-    password: '',
-    clicked: false,
-    validate: false,
-  };
-
-  chageFocus = () => {
-    this.input.focus();
-    this.mydiv.style.backgroundColor = 'yellow';
+    posts: [
+      {
+        id: 1,
+        title: '제목1',
+      },
+      {
+        id: 2,
+        title: '제목2',
+      },
+      {
+        id: 3,
+        title: '제목3',
+      },
+    ],
   };
 
   render() {
+    const ContainerBox = styled.div`
+      display: grid;
+      justify-content: center;
+    `;
+
+    // 렌더링 될 때마다 계속 그려질 필요가 없기 때문에 const 사용
+
+    const add = () => {
+      this.setState({
+        posts: this.state.posts.concat({ id: 4, title: '제목4' }),
+      });
+    };
+
+    const del = () => {
+      this.setState({
+        posts: this.state.posts.filter((post) => {
+          return post.id !== 2;
+        }),
+      });
+    };
+
     return (
-      <div>
-        <input
-          ref={(ref) => {
-            this.input = ref;
-          }}
-          type="text"
-          placeholder="Username"
-        />
-        <input type="text" placeholder="Password" />
-        <div
-          ref={(ref) => {
-            this.mydiv = ref;
-          }}
-        >
-          abc
-        </div>
-        <button onClick={this.chageFocus}>포커스 이동</button>
-      </div>
+      <ContainerBox>
+        <button onClick={add}>추가</button>
+        <button onClick={del}>삭제</button>
+        {this.state.posts.map((post) => {
+          return <Post id={post.id} title={post.title} />;
+        })}
+      </ContainerBox>
     );
   }
 }
